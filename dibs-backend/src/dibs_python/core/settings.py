@@ -36,6 +36,6 @@ def get_settings() -> Settings:
     Function to get 'Dibs' app settings. Used in 
     most of the instances in codebase
     """
-    return Settings()
+    return Settings() # type: ignore
 
-settings = get_settings()
+

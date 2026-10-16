@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 
-from dibs_python.core.settings import settings
-
 from dibs_python.api.v1.router import router as api_v1_router
+from dibs_python.core.dependencies import SettingsDep
+from dibs_python.core.settings import get_settings
 
-app = FastAPI(title="Dibs", description="Dibs API", version=settings.app_version, debug=settings.app_debug)
+cfg = get_settings()
+
+app = FastAPI(title="Dibs", description="Dibs API", version=cfg.app_version, debug=cfg.app_debug)
 
 app.include_router(api_v1_router)
 
@@ -16,7 +18,7 @@ def health() -> dict:
     return {"status": "ok"}
 
 @app.get('/version', tags=["Version"])
-def version() -> dict:
+def version(settings: SettingsDep) -> dict:
     """
     Version endpoint
     """
