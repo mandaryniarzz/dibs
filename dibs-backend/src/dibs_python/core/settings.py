@@ -5,12 +5,11 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     """
-    Class containing 'Dibs' app settings. Used in 
+    Class containing 'Dibs' app settings. Used in
     most of the instances in codebase
     """
 
     # app settings
-    app_mode: str = "dev"
     app_debug: bool = True
     app_version: str = "0.0.1"
 
@@ -20,6 +19,13 @@ class Settings(BaseSettings):
     db_name: str
     db_user: str
     db_password: str
+
+    @property
+    def db_url(self) -> str:
+        """
+        Function to get database url from settings
+        """
+        return f"postgresql+asyncpg://{self.db_user}:{self.db_password}@{self.db_host}:{self.db_port}/{self.db_name}"
 
     # uvicorn deployment settings
     uvicorn_host: str
@@ -33,9 +39,7 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     """
-    Function to get 'Dibs' app settings. Used in 
+    Function to get 'Dibs' app settings. Used in
     most of the instances in codebase
     """
     return Settings() # type: ignore
-
-
